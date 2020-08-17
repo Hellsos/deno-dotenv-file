@@ -4,16 +4,31 @@
  * @param nestedKeys
  * @param value
  */
-const appendRecursiveProperties = ( base : any, nestedKeys : Array<string>, value : string | boolean | number ) => {
+const appendRecursiveProperties = ( base : any, nestedKeys : Array<string>, value : string ) => {
 	return nestedKeys.reduce( ( acc : any, current : string, index : number ) => {
 		if ( acc[ current ] ) {
 			return acc[ current ] = acc[ current ];
 		} else if ( index < nestedKeys.length - 1 ) {
 			return acc[ current ] = {};
 		} else {
-			return acc[ current ] = value;
+			// TODO throw exception on duplicate keys
+			return acc[ current ] = parseValueFromString( value );
 		}
 	}, base );
+};
+
+/**
+ *
+ * @param stringValue
+ */
+const parseValueFromString = ( stringValue : string ) => {
+	if ( stringValue === "null" ) return null;
+	if ( stringValue === "undefined" ) return undefined;
+	if ( stringValue === "true" ) return true;
+	if ( stringValue === "false" ) return false;
+	let number = /^\d+$/.exec( stringValue );
+	if ( number ) return parseInt(number.input);
+	return stringValue;
 };
 
 /**
