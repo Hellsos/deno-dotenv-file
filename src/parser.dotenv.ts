@@ -4,54 +4,68 @@
  * @param nestedKeys
  * @param value
  */
-const appendRecursiveProperties = ( base : any, nestedKeys : Array<string>, value : string ) => {
-	return nestedKeys.reduce( ( acc : any, current : string, index : number ) => {
-		if ( acc[ current ] ) {
-			return acc[ current ] = acc[ current ];
-		} else if ( index < nestedKeys.length - 1 ) {
-			return acc[ current ] = {};
-		} else {
-			// TODO throw exception on duplicate keys
-			return acc[ current ] = parseValueFromString( value );
+import { appendRecursiveProperties, cleanseKeyString, cleanseValueString } from "./helper.dotenv.ts";
+
+
+
+const parser = {
+	/**
+	 *
+	 * @param envContent
+	 */
+	getLines : ( envContent : string ) : Array<[ string, string ]> => {
+		return envContent.split( "\n" )
+						 .filter( line => line.length > 0 && !line.startsWith( "#" ) )
+						 .reduce( ( acc : Array<[ string, string ]>, currentLine : string ) => {
+							 const parts = currentLine.split( "=" );
+							 if ( currentLine.includes( "=" ) ) {
+								 acc[ acc.length ] = [ cleanseKeyString( parts[ 0 ] ), cleanseValueString( parts[ 1 ] ) ];
+							 } else {
+								 acc[ acc.length - 1 ][ 1 ] += cleanseValueString( parts[ 0 ] );
+							 }
+							 return acc;
+						 }, [] );
+	},
+	checkDuplicateKeys : ( envContent : string, lines : Array<[ string, string ]> ) => {
+		const duplicateKeysInEnv : Map<number, Error> = new Map<number, Error>();
+
+		const rawLines = envContent.split( "\n" );
+
+		lines.reduce( ( acc : Array<string>, currentLine : [ string, string ] ) => {
+			const key = currentLine[ 0 ];
+			if ( acc.includes( key ) ) {
+				rawLines.forEach( ( line, index ) => {
+					const lineNumber = index + 1;
+					if ( line.startsWith( key ) ) {
+						duplicateKeysInEnv.set( lineNumber, new Error( `Duplicate [${ key }] on line ${ lineNumber }` ) );
+					}
+				} );
+			}
+			acc.push( key );
+			return acc;
+		}, [] );
+
+		if ( duplicateKeysInEnv.size > 0 ) {
+			throw [ ...duplicateKeysInEnv.values() ].join( "\n" );
 		}
-	}, base );
-};
+		return lines;
+	},
+	/**
+	 *
+	 * @param envContent
+	 */
+	getStructure : <T>( envContent : string ) : T => {
+		return parser.checkDuplicateKeys( envContent, parser.getLines( envContent ) )
+					 .reduce( ( acc : T, currentLine : [ string, string ] ) => {
+						 const key = currentLine[ 0 ];
+						 const value = currentLine[ 1 ];
+						 const nestedKeys = key.split( ":" );
 
-/**
- *
- * @param stringValue
- */
-const parseValueFromString = ( stringValue : string ) => {
-	if ( stringValue === "null" ) return null;
-	if ( stringValue === "undefined" ) return undefined;
-	if ( stringValue === "true" ) return true;
-	if ( stringValue === "false" ) return false;
-	let number = /^\d+$/.exec( stringValue );
-	if ( number ) return parseInt(number.input);
-	return stringValue;
-};
+						 appendRecursiveProperties( acc, nestedKeys, value );
 
-/**
- *
- * @param envFile
- */
-const parser = async <T>( envFile : Deno.File ) => {
-	const decoder = new TextDecoder( "utf-8" );
-	const text = decoder.decode( await Deno.readAll( envFile ) );
-
-	// TODO multiline
-	return text.split( "\n" )
-			   .filter( line => line.length > 0 && !line.startsWith( "#" ) )
-			   .reduce( ( acc : T, currentLine : string ) => {
-				   const parts = currentLine.split( "=" );
-				   const key = parts[ 0 ].trim();
-				   const value = parts[ 1 ].trim().replace( /"/g, "" ).replace( /'/g, "" );
-				   const nestedKeys = key.split( ":" );
-
-				   appendRecursiveProperties( acc, nestedKeys, value );
-
-				   return acc;
-			   }, {} as T );
+						 return acc;
+					 }, {} as T );
+	}
 };
 
 export {
