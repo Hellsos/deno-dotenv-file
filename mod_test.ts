@@ -47,7 +47,7 @@ Deno.test( {
 	fn : async () => {
 		const mockStructure : IEnvMultilineStructure = {
 			SECURITY : {
-				KEY : `-----BEGIN RSA PRIVATE KEY-----
+				KEY : `-----BEGIN RSA PRIVATE KEY TEST GENERATED-----
 MIIBOgIBAAJBAJlxzvqoDGaanSXkyQdtUVxD/4HTA6DNoODdVn2yHh8n+1XS4dGq
 Caqw8v491mOUioI48zxc+fWJndJz2NIU8CUCAwEAAQJAEt+hwsj6xYANBkUuyOAU
 WtHuUoye7J9+Q0pWQh2vgMtbBO5wGnmtirQ0vqNve48J6xQjtnRG8CX2o/AIyCKL
@@ -55,7 +55,7 @@ gQIhAPtybm8kCgE/reekg46zbfvInu+9im9R8qP00V5q0r5hAiEAnDkXn+d2jnzN
 5jLh0JCI9b5lLNtlmYUa9+Zg4BYroEUCIFemWwKZAHfQ99EAku9icptLIsQVQTVu
 znMCuxz7hbzhAiBGzAjMypSL1jtpSz3Syu2GkJZBUdwlSpECL0FPzDxREQIhAOgt
 0tiMRwonS5uc/sliUnOF1/c47gfcbaJavVSFtqZF
------END RSA PRIVATE KEY-----`
+-----END RSA PRIVATE KEY TEST GENERATED-----`
 			}
 		};
 

@@ -25,7 +25,9 @@ const parser = {
 							 return acc;
 						 }, [] );
 	},
-	checkDuplicateKeys : ( envContent : string, lines : Array<[ string, string ]> ) => {
+	checkDuplicateKeys : ( envContent : string, lines : Array<[ string, string ]>, errorOnDuplicateKey : boolean = true ) => {
+		if ( errorOnDuplicateKey === false ) return lines;
+
 		const duplicateKeysInEnv : Map<number, Error> = new Map<number, Error>();
 
 		const rawLines = envContent.split( "\n" );
@@ -52,9 +54,10 @@ const parser = {
 	/**
 	 *
 	 * @param envContent
+	 * @param errorOnDuplicateKey
 	 */
-	getStructure : <T>( envContent : string ) : T => {
-		return parser.checkDuplicateKeys( envContent, parser.getLines( envContent ) )
+	getStructure : <T>( envContent : string, errorOnDuplicateKey : boolean = true ) : T => {
+		return parser.checkDuplicateKeys( envContent, parser.getLines( envContent ), errorOnDuplicateKey )
 					 .reduce( ( acc : T, currentLine : [ string, string ] ) => {
 						 const key = currentLine[ 0 ];
 						 const value = currentLine[ 1 ];

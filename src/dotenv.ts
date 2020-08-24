@@ -4,7 +4,7 @@ import { parser } from "./parser.dotenv.ts";
 interface ILoadEnvOptions {
 	envPath? : string,
 	envLockPath? : string | null;
-	errorOnDuplicatedKey ? : boolean;
+	errorOnDuplicateKey ? : boolean;
 }
 
 /**
@@ -16,13 +16,13 @@ const loadEnv = async <T>( options : ILoadEnvOptions = {} ) => {
 		...{
 			envPath : ".env",
 			envLockPath : null,
-			errorOnDuplicatedKey: false
+			errorOnDuplicateKey: false
 		},
 		...options,
 	};
 
 	const envContent = await reader( opts.envPath );
-	const envParsed = parser.getStructure<T>( envContent );
+	const envParsed = parser.getStructure<T>( envContent, opts.errorOnDuplicateKey );
 
 	if ( opts.envLockPath != null ) {
 		const envLockContent = await reader( opts.envLockPath );
