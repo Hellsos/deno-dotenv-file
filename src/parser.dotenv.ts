@@ -7,21 +7,20 @@
 import { appendRecursiveProperties, cleanseKeyString, cleanseValueString } from "./helper.dotenv.ts";
 
 
-
 const parser = {
 	/**
 	 *
 	 * @param envContent
 	 */
 	getLines : ( envContent : string ) : Array<[ string, string ]> => {
-		return envContent.split( "\n" )
+		return envContent.split( /\n|\r|\r\n/ )
 						 .filter( line => line.length > 0 && !line.startsWith( "#" ) )
 						 .reduce( ( acc : Array<[ string, string ]>, currentLine : string ) => {
 							 const parts = currentLine.split( "=" );
 							 if ( currentLine.includes( "=" ) ) {
 								 acc[ acc.length ] = [ cleanseKeyString( parts[ 0 ] ), cleanseValueString( parts[ 1 ] ) ];
 							 } else {
-								 acc[ acc.length - 1 ][ 1 ] += cleanseValueString( parts[ 0 ] );
+								 acc[ acc.length - 1 ][ 1 ] += "\n" + parts[ 0 ].trim();
 							 }
 							 return acc;
 						 }, [] );

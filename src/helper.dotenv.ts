@@ -11,8 +11,10 @@ const cleanseKeyString = ( stringValue : string ) => {
  * @param stringValue
  */
 const cleanseValueString = ( stringValue : string ) => {
-	// TODO clean side quotes
-	return stringValue.trim();
+	let formatted = stringValue.trim();
+	if ( [ "'", "\"" ].includes( formatted.charAt( 0 ) ) ) formatted = formatted.slice( 1 );
+	if ( [ "'", "\"" ].includes( formatted.charAt( formatted.length - 1 ) ) ) formatted = formatted.slice( 0, -1 );
+	return formatted;
 };
 
 
@@ -27,7 +29,11 @@ const parseValueFromString = ( stringValue : string ) => {
 	if ( stringValue === "false" ) return false;
 	let number = parseFloat( stringValue );
 	if ( number ) return number;
-	return stringValue;
+	try {
+		return JSON.parse( stringValue );
+	} catch ( e ) {
+		return stringValue;
+	}
 };
 
 
