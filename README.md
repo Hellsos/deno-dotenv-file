@@ -1,4 +1,4 @@
-# Envfile  [![Deno ci](https://github.com/Hellsos/deno-envfile/workflows/CI/badge.svg)](https://github.com/Hellsos/deno-envfile)
+# DotEnv File  [![Deno ci](https://github.com/Hellsos/deno-dotenv-file/workflows/CI/badge.svg)](https://github.com/Hellsos/deno-dotenv-file)
 
 A library for Deno parsing .env file into object oriented structure making it more friendly for working in IDEs.
 
@@ -20,7 +20,7 @@ Define interface structure of **.env** file, load and print out the structure.
 
 ````ts
 // app.ts
-import { loadEnv } from "https://deno.land/x/deno_envfile/mod.ts";
+import { loadEnv } from "https://deno.land/x/deno_dotenv_file/mod.ts";
 
 interface IEnvStructure {
 	Debug : boolean;
@@ -89,7 +89,7 @@ Define interface structure of **.env.lock** file, load and try to print out pars
 
 ````ts
 // app.ts
-import { loadEnv } from "https://deno.land/x/deno_envfile/mod.ts";
+import { loadEnv } from "https://deno.land/x/deno_dotenv_file/mod.ts";
 
 interface IEnvStructure {
     Example : string;
