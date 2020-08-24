@@ -1,4 +1,4 @@
-import { assertEquals, assertStrictEquals } from "https://deno.land/std@0.65.0/testing/asserts.ts";
+import { assertEquals, assertStrictEquals, assertThrows, assertThrowsAsync } from "https://deno.land/std@0.65.0/testing/asserts.ts";
 
 import { loadEnv } from "./src/dotenv.ts";
 
@@ -134,48 +134,3 @@ Deno.test( {
 	sanitizeResources : false,
 	sanitizeOps : false
 } );
-
-
-////////////////////////////////////////////////////////////////////////////////
-
-interface IEnvDuplicateStructure {
-	VARIABLE : string;
-}
-
-Deno.test( {
-	name : "Testing .env.duplicate-keys - Basic structure",
-	fn : async () => {
-		/** TODO assertThrowsAsync will throw
-
-		Error: Duplicate [VARIABLE] on line 1
-		Error: Duplicate [VARIABLE] on line 2
-		 */
-		assertEquals( 1, 1 );
-	},
-	sanitizeResources : false,
-	sanitizeOps : false
-} );
-
-
-////////////////////////////////////////////////////////////////////////////////
-
-interface IEnvPredefinedStructure {
-	FIRST : string;
-	SECOND : string;
-	THIRD : string;
-}
-
-Deno.test( {
-	name : "Testing .env.predefined - Predefined lock Structure",
-	fn : async () => {
-		/** TODO assertThrowsAsync will throw
-
-		Error: Missing [SECOND] in [./examples/.env-predefined]
-		 */
-
-		assertEquals( 1, 1 );
-	},
-	sanitizeResources : false,
-	sanitizeOps : false
-} );
-
