@@ -20,7 +20,7 @@ Define interface structure of **.env** file, load and print out the structure.
 
 ````ts
 // app.ts
-import { loadEnv } from "https://raw.githubusercontent.com/Hellsos/deno-envfile/master/mod.ts";
+import { loadEnv } from "https://deno.land/x/deno_envfile/mod.ts";
 
 interface IEnvStructure {
 	Debug : boolean;
@@ -89,7 +89,7 @@ Define interface structure of **.env.lock** file, load and try to print out pars
 
 ````ts
 // app.ts
-import { loadEnv } from "https://raw.githubusercontent.com/Hellsos/deno-envfile/master/mod.ts";
+import { loadEnv } from "https://deno.land/x/deno_envfile/mod.ts";
 
 interface IEnvStructure {
     Example : string;
