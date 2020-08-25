@@ -1,6 +1,6 @@
 # DotEnv File  [![Deno ci](https://github.com/Hellsos/deno-dotenv-file/workflows/CI/badge.svg)](https://github.com/Hellsos/deno-dotenv-file)
 
-A library for Deno parsing .env file into object oriented structure making it more friendly for working in IDEs.
+A library for Deno parsing dotenv file into object-oriented structure making it more friendly for working in IDEs.
 
 ## Usage
 
