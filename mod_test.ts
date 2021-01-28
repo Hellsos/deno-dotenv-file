@@ -116,6 +116,9 @@ interface IEnvNamespaceStructure {
 		host : string;
 		port : string;
 		password : string;
+	},
+	Test: {
+		StringWithNumbers: string
 	}
 }
 
@@ -129,6 +132,7 @@ Deno.test( {
 
 		assertEquals( false, env.VARIABLE );
 		assertEquals( "won't tell you", env.MyAnotherSecretDatabase.password );
+		assertEquals( "5b54534877d09fc7024b6e9695783ea1", env.Test.StringWithNumbers );
 
 	},
 	sanitizeResources : false,

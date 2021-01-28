@@ -27,8 +27,7 @@ const parseValueFromString = ( stringValue : string ) => {
 	if ( stringValue === "undefined" ) return undefined;
 	if ( stringValue === "true" ) return true;
 	if ( stringValue === "false" ) return false;
-	let number = parseFloat( stringValue );
-	if ( number ) return number;
+	if ( /^\d+$/.test(stringValue) ) return parseFloat(stringValue);
 	try {
 		return JSON.parse( stringValue );
 	} catch ( e ) {
